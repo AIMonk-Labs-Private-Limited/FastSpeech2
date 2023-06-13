@@ -98,7 +98,7 @@ def synthesize(model, step, configs, vocoder, batchs, control_values):
                 e_control=energy_control,
                 d_control=duration_control
             )
-            synth_samples(
+            wav_predictions, sampling_rate, basenames = synth_samples(
                 batch,
                 output,
                 vocoder,

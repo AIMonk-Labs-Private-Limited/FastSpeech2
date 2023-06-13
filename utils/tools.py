@@ -187,15 +187,15 @@ def synth_samples(targets, predictions, vocoder, model_config, preprocess_config
             stats = json.load(f)
             stats = stats["pitch"] + stats["energy"][:2]
 
-        fig = plot_mel(
-            [
-                (mel_prediction.cpu().numpy(), pitch, energy),
-            ],
-            stats,
-            ["Synthetized Spectrogram"],
-        )
-        plt.savefig(os.path.join(path, "{}.png".format(basename)))
-        plt.close()
+        # fig = plot_mel(
+        #     [
+        #         (mel_prediction.cpu().numpy(), pitch, energy),
+        #     ],
+        #     stats,
+        #     ["Synthetized Spectrogram"],
+        # )
+        # plt.savefig(os.path.join(path, "{}.png".format(basename)))
+        # plt.close()
 
     from .model import vocoder_infer
 
@@ -204,10 +204,9 @@ def synth_samples(targets, predictions, vocoder, model_config, preprocess_config
     wav_predictions = vocoder_infer(
         mel_predictions, vocoder, model_config, preprocess_config, lengths=lengths
     )
-
     sampling_rate = preprocess_config["preprocessing"]["audio"]["sampling_rate"]
-    for wav, basename in zip(wav_predictions, basenames):
-        wavfile.write(os.path.join(path, "{}.wav".format(basename)), sampling_rate, wav)
+    return wav_predictions, basenames 
+    
 
 
 def plot_mel(data, stats, titles):

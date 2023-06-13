@@ -1,0 +1,6 @@
+config/LibriTTS/preprocess.yaml
+config/LibriTTS/train.yaml
+requirements.txt
+synthesize.py
+utils/model.py
+utils/tools.py

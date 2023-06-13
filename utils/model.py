@@ -1,30 +1,34 @@
+# import pdb;pdb.set_trace()
 import os
+import sys 
+# sys.path.append('fastspeech2/models/fastspeech/1/backend/hifigan')
+# sys.path.append('fastspeech2/models/fastspeech/1/backend/model')
 import json
-
 import torch
 import numpy as np
+import backend.hifigan as hifigan
+from backend.model import FastSpeech2, ScheduledOptim
 
-import hifigan
-from model import FastSpeech2, ScheduledOptim
-
+RESTORE_STEP = 800000
 
 def get_model(args, configs, device, train=False):
     (preprocess_config, model_config, train_config) = configs
 
     model = FastSpeech2(preprocess_config, model_config).to(device)
-    if args.restore_step:
+    if RESTORE_STEP:
         ckpt_path = os.path.join(
             train_config["path"]["ckpt_path"],
-            "{}.pth.tar".format(args.restore_step),
+            "{}.pth.tar".format(RESTORE_STEP),
         )
         ckpt = torch.load(ckpt_path)
         model.load_state_dict(ckpt["model"])
+        print('Loading ckpt model...')
 
     if train:
         scheduled_optim = ScheduledOptim(
-            model, train_config, model_config, args.restore_step
+            model, train_config, model_config, RESTORE_STEP
         )
-        if args.restore_step:
+        if RESTORE_STEP:
             scheduled_optim.load_state_dict(ckpt["optimizer"])
         model.train()
         return model, scheduled_optim
@@ -55,14 +59,15 @@ def get_vocoder(config, device):
         vocoder.mel2wav.eval()
         vocoder.mel2wav.to(device)
     elif name == "HiFi-GAN":
-        with open("hifigan/config.json", "r") as f:
+        with open("fastspeech2/models/fastspeech/1/backend/hifigan/config.json", "r") as f:
             config = json.load(f)
         config = hifigan.AttrDict(config)
         vocoder = hifigan.Generator(config)
         if speaker == "LJSpeech":
             ckpt = torch.load("hifigan/generator_LJSpeech.pth.tar")
         elif speaker == "universal":
-            ckpt = torch.load("hifigan/generator_universal.pth.tar")
+            ckpt = torch.load("fastspeech2/models/fastspeech/1/backend/hifigan/generator_universal.pth.tar")
+            print('Loading hifigan model...')
         vocoder.load_state_dict(ckpt["generator"])
         vocoder.eval()
         vocoder.remove_weight_norm()
