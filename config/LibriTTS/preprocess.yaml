@@ -2,9 +2,9 @@ dataset: "LibriTTS"
 
 path:
   corpus_path: "/home/ming/Data/LibriTTS/train-clean-360"
-  lexicon_path: "fastspeech2/models/fastspeech/1/backend/lexicon/librispeech-lexicon.txt"
+  lexicon_path: "models/fastspeech2/1/FastSpeech2/lexicon/librispeech-lexicon.txt"
   raw_path: "./raw_data/LibriTTS"
-  preprocessed_path: "fastspeech2/models/fastspeech/1/backend/preprocessed_data/LibriTTS"
+  preprocessed_path: "models/fastspeech2/1/FastSpeech2/preprocessed_data/LibriTTS"
 
 preprocessing:
   val_size: 512

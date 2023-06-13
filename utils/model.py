@@ -1,13 +1,13 @@
 # import pdb;pdb.set_trace()
 import os
 import sys 
-# sys.path.append('fastspeech2/models/fastspeech/1/backend/hifigan')
-# sys.path.append('fastspeech2/models/fastspeech/1/backend/model')
+# sys.path.append('models/fastspeech2/1/FastSpeech2/hifigan')
+# sys.path.append('models/fastspeech2/1/FastSpeech2/model')
 import json
 import torch
 import numpy as np
-import backend.hifigan as hifigan
-from backend.model import FastSpeech2, ScheduledOptim
+import FastSpeech2.hifigan as hifigan
+from FastSpeech2.model import FastSpeech2, ScheduledOptim
 
 RESTORE_STEP = 800000
 
@@ -59,14 +59,14 @@ def get_vocoder(config, device):
         vocoder.mel2wav.eval()
         vocoder.mel2wav.to(device)
     elif name == "HiFi-GAN":
-        with open("fastspeech2/models/fastspeech/1/backend/hifigan/config.json", "r") as f:
+        with open("models/fastspeech2/1/FastSpeech2/hifigan/config.json", "r") as f:
             config = json.load(f)
         config = hifigan.AttrDict(config)
         vocoder = hifigan.Generator(config)
         if speaker == "LJSpeech":
             ckpt = torch.load("hifigan/generator_LJSpeech.pth.tar")
         elif speaker == "universal":
-            ckpt = torch.load("fastspeech2/models/fastspeech/1/backend/hifigan/generator_universal.pth.tar")
+            ckpt = torch.load("models/fastspeech2/1/checkpoints/generator_universal.pth.tar")
             print('Loading hifigan model...')
         vocoder.load_state_dict(ckpt["generator"])
         vocoder.eval()

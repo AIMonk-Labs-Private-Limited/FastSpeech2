@@ -1,7 +1,7 @@
 path:
-  ckpt_path: "fastspeech2/models/fastspeech/1/backend/output/ckpt/LibriTTS"
-  log_path: "fastspeech2/models/fastspeech/1/backend/output/log/LibriTTS"
-  result_path: "fastspeech2/models/fastspeech/1/backend/output/result/LibriTTS"
+  ckpt_path: "models/fastspeech2/1/checkpoints"
+  log_path: "models/fastspeech2/1/FastSpeech2/output/log/LibriTTS"
+  result_path: "models/fastspeech2/1/FastSpeech2/output/result/LibriTTS"
 optimizer:
   batch_size: 16
   betas: [0.9, 0.98]
